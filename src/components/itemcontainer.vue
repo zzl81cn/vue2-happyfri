@@ -13,7 +13,7 @@
     			<div class="item_list_container" v-if="this.$store.state.itemDetail.length > 0">
     				<header class="item_title">{{itemDetail[itemNum-1].topic_name}}</header>
     				<ul>
-    					<li  v-for="(item, index) in itemDetail[itemNum-1].topic_answer" @click="choosed(index, item.topic_answer_id)" class="item_list">
+    					<li v-for="(item, index) in itemDetail[itemNum-1].topic_answer" @click="choosed(index, item.topic_answer_id)" v-bind:key="index" class="item_list">
     						<span class="option_style" v-bind:class="{'has_choosed':choosedNum==index}">{{chooseType(index)}}</span>
     						<span class="option_detail">{{item.answer_name}}</span>
     					</li>
@@ -37,42 +37,42 @@ export default {
 			choosedId:null
 		}
 	},
-  	props:['fatherComponent'],
-  	computed: mapState({
+	props:['fatherComponent'],
+	computed: mapState({
 	  	itemNum: state => state.itemNum,
   		level: state => state.level,
   		itemDetail: state => state.itemDetail
 	}),
-  	methods: {
-  		nextItem: function (){
-  			if (this.choosedNum !== null) {
-	  			this.choosedNum = null;
-	  			this.$store.dispatch('addNum',this.choosedId)
-  			}else{
-  				alert('您还没有选择答案哦')
-  			}
-  		},
-	  	chooseType: type => {
-	  		switch(type){
-	  			case 0: return 'A';
-	  			case 1: return 'B';
-	  			case 2: return 'C';
-	  			case 3: return 'D';
-	  		}
-	  	},
-	  	choosed: function (type,id){
-	  		this.choosedNum = type;
-	  		this.choosedId = id;
-	  	},
-	  	submitAnswer: function (){
-	  		if (this.choosedNum !== null) {
-	  			this.$store.dispatch('addNum',this.choosedId)
-	  			clearInterval(this.$store.state.timer)
-	  			this.$router.push('score')
-  			}else{
-  				alert('您还没有选择答案哦')
-  			}
-	  	},
+	methods: {
+		nextItem: function (){
+			if (this.choosedNum !== null) {
+				this.choosedNum = null;
+				this.$store.dispatch('addNum',this.choosedId)
+			}else{
+				alert('您还没有选择答案哦')
+			}
+		},
+		chooseType: type => {
+			switch(type){
+				case 0: return 'A';
+				case 1: return 'B';
+				case 2: return 'C';
+				case 3: return 'D';
+			}
+		},
+		choosed: function (type,id){
+			this.choosedNum = type;
+			this.choosedId = id;
+		},
+		submitAnswer: function (){
+			if (this.choosedNum !== null) {
+				this.$store.dispatch('addNum',this.choosedId)
+				clearInterval(this.$store.state.timer)
+				this.$router.push('score')
+			}else{
+				alert('您还没有选择答案哦')
+			}
+		},
 	},
 	created(){
 		this.$store.dispatch('initializeData');
